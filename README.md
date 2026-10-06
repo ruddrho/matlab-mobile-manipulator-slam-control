@@ -59,13 +59,6 @@ The repository contains MATLAB source code, tests, measured results, figures, si
 
 ---
 
-# Simulation Demo
-
-<p align="center">
-  <a href="assets/mobile_manipulator_smooth-compressed%20(1)%20(online-video-cutter.com)-compressed.mp4">
-    <img src="https://raw.githubusercontent.com/ruddrho/matlab-mobile-manipulator-slam-control/main/assets/mobile_manipulator_demo.gif" alt="Mobile Manipulator Demo" width="900">
-  </a>
-</p>
 
 ### Media
 
