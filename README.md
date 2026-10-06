@@ -379,14 +379,26 @@ This result applies specifically to the supplied model, gains, trajectories and 
 
 # Monte Carlo Robustness Study
 
-For **20 sampled uncertainty trials**, the measured mean RMS errors are:
+A matched **20-trial uncertainty analysis** was performed to compare **PD + Gravity Compensation** against **Computed-Torque Control (CTC)** under the same sampled uncertainty conditions.
 
 | Controller | Mean RMS Error |
 |---|---:|
 | PD + Gravity Compensation | **0.007494 rad** |
-| Computed Torque | **0.013617 rad** |
+| Computed-Torque Control | **0.013617 rad** |
 
-The supplied PD + gravity-compensation configuration produces the lower pooled mean RMS error across the tested uncertainty trials.
+<p align="center">
+  <img src="results/monte_carlo_difference.png" alt="Monte Carlo matched-trial RMS difference between PD plus gravity compensation and computed-torque control" width="900">
+</p>
+
+<p align="center">
+  <b>Matched-trial RMS difference: PD RMS − CTC RMS</b>
+</p>
+
+Negative values indicate that **PD + Gravity Compensation achieved lower RMS tracking error** than Computed-Torque Control for the corresponding matched trial.
+
+The mean matched difference was approximately **−0.006123 rad**, and all 20 sampled trials produced negative differences in the supplied experiment.
+
+These results indicate better robustness of the supplied PD + gravity-compensation configuration under the tested uncertainty conditions. They apply specifically to the implemented model, controller gains, disturbance assumptions and sampled uncertainty range, and should not be interpreted as a universal ranking of the two control methods.
 
 ---
 
