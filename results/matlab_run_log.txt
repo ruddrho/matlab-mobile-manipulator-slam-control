@@ -1,0 +1,42 @@
+Started: 2026-10-06 21:34:05
+MATLAB: 24.1.0.2537033 (R2024a)
+Platform: PCWIN64
+PASS: 50 FK/IK, Jacobian, SPD mass, gravity gradient checks; workspace rejection; quintic boundaries; collision-free A*; LiDAR geometry.
+   0.30 s | Approach block 1
+   3.90 s | Pre-grasp
+   7.50 s | Cartesian descend
+  11.10 s | Lift payload
+  14.70 s | Stow arm
+ 100.10 s | Transport block 1
+ 103.70 s | Pre-place
+ 107.30 s | Cartesian place
+ 110.90 s | Retract
+ 114.50 s | Stow arm
+ 200.05 s | Approach block 2
+ 203.65 s | Pre-grasp
+ 207.25 s | Cartesian descend
+ 210.85 s | Lift payload
+ 214.45 s | Stow arm
+ 299.80 s | Transport block 2
+ 303.40 s | Pre-place
+ 307.00 s | Cartesian place
+ 310.60 s | Retract
+ 314.20 s | Stow arm
+ 317.80 s | Wrist camera inspection
+ 323.80 s | SCANNING RED + BLUE STACK
+ 327.40 s | Return posture
+ 413.05 s | Return and dock
+Mission complete: 1 | duration 413.0 s | minimum clearance 0.060 m
+PASS: extended route, eight AGV full stops, collision-free paths, and six-second scan after both boxes placed.
+PASS: pickup/place pads avoided throughout complete mission; minimum base-envelope/pad clearance 0.060003 m.
+PASS: 2066 online scans; max position error 0.000 m; processing 2.83 s.
+PASS: empty-map initialization, free/occupied observations, bounded pose error and stable map graphics.
+Experiment 1 / 8
+Experiment 2 / 8
+Experiment 3 / 8
+Experiment 4 / 8
+Experiment 5 / 8
+Experiment 6 / 8
+Experiment 7 / 8
+Experiment 8 / 8
+ALL REQUESTED RUNS COMPLETED: 2026-10-06 21:34:33
