@@ -387,7 +387,7 @@ A matched **20-trial uncertainty analysis** was performed to compare **PD + Grav
 | Computed-Torque Control | **0.013617 rad** |
 
 <p align="center">
-  <img src="results/monte_carlo_difference.png" alt="Monte Carlo matched-trial RMS difference between PD plus gravity compensation and computed-torque control" width="900">
+  <img src="https://github.com/ruddrho/matlab-mobile-manipulator-slam-control/blob/main/assets/monte_carlo_difference.png" width="900">
 </p>
 
 <p align="center">
