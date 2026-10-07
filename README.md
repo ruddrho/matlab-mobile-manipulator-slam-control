@@ -219,3 +219,9 @@ The next evaluation priorities are noisy odometry and LiDAR, independent map-qua
 **Ruddrho Mollik — Robotics & Control Systems**
 
 [GitHub profile](https://github.com/ruddrho) · [Project repository](https://github.com/ruddrho/matlab-mobile-manipulator-slam-control)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+Copyright (c) 2026 Ruddrho Mollik.
