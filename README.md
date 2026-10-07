@@ -1,210 +1,87 @@
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-![MATLAB](https://img.shields.io/badge/MATLAB-R2024a-orange?style=for-the-badge&logo=mathworks)
-![Platform](https://img.shields.io/badge/Platform-Windows-blue?style=for-the-badge&logo=windows)
-![Robotics](https://img.shields.io/badge/Robotics-Mobile%20Manipulator-0A66C2?style=for-the-badge)
-![Navigation](https://img.shields.io/badge/Navigation-A%2A-success?style=for-the-badge)
-![SLAM](https://img.shields.io/badge/Mapping-LiDAR%20SLAM-purple?style=for-the-badge)
-![Control](https://img.shields.io/badge/Control-PD%20%7C%20Computed%20Torque-red?style=for-the-badge)
+# MATLAB Mobile Manipulator: Navigation, Pick-and-Place, Mapping & Control
+
+![MATLAB](https://img.shields.io/badge/MATLAB-R2024a-orange?style=for-the-badge)
+![Platform](https://img.shields.io/badge/Platform-Windows-blue?style=for-the-badge)
 ![Manipulator](https://img.shields.io/badge/Manipulator-6--DOF-informational?style=for-the-badge)
-![Simulation](https://img.shields.io/badge/Project-Simulation-yellow?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Reproducible-brightgreen?style=for-the-badge)
+![Navigation](https://img.shields.io/badge/Navigation-A%2A-success?style=for-the-badge)
+![Mapping](https://img.shields.io/badge/Mapping-LiDAR%20Occupancy%20Grid-purple?style=for-the-badge)
+![Control](https://img.shields.io/badge/Control-PD%20%7C%20Computed%20Torque-red?style=for-the-badge)
 
-# MATLAB Mobile Manipulator: Navigation, Pick-and-Place, SLAM & Control
+A MATLAB simulation of a **four-wheel mobile base carrying a six-axis robotic arm**, integrating waypoint navigation, two-block pick-and-place, scripted AGV crossing stops, live LiDAR mapping and quantitative control evaluation.
 
-A reproducible MATLAB robotics simulation integrating **autonomous mobile navigation, six-axis robotic manipulation, pick-and-place, multi-block stacking, dynamic AGV interaction, LiDAR sensing, live occupancy-grid mapping, controller benchmarking and Monte Carlo robustness analysis**.
-
-**Verified environment:** MATLAB R2024a on Windows.
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/ruddrho/matlab-mobile-manipulator-slam-control/main/assets/mobile_manipulator_demo.gif" alt="Mobile Manipulator Simulation" width="900">
-</p>
+**Verified execution environment:** MATLAB R2024a on Windows. The repository includes measured mission data, eight controller experiments, 20 matched Monte Carlo trials and a technical report.
 
 <p align="center">
-  <b>Navigation • Mobile Manipulation • LiDAR Mapping • Pick-and-Place • Control Evaluation</b>
+  <img src="https://raw.githubusercontent.com/ruddrho/matlab-mobile-manipulator-slam-control/main/assets/mobile_manipulator_demo.gif" alt="Mobile manipulator navigation and pick-and-place simulation" width="900">
 </p>
 
----
+<p align="center"><b>Navigation · Mobile Manipulation · LiDAR Mapping · Control Evaluation</b></p>
 
-## Project Overview
+[Simulation MP4](assets/mobile_manipulator_smooth-compressed%20(1)%20(online-video-cutter.com)-compressed.mp4) · [Animated GIF](assets/mobile_manipulator_demo.gif) · [Technical Report](docs/Mobile_Manipulator_Technical_Report.pdf)
 
-This project simulates a **four-wheel autonomous mobile base carrying a six-axis robotic arm**.
+The demonstration video is edited. Numerical performance is taken from the saved MATLAB results and execution logs, not from video playback duration.
 
-The complete mission integrates:
+## Overview
 
-- Waypoint-constrained **A\*** navigation
-- Curved mobile-robot path following
-- Dynamic AGV crossing stops
-- Six-axis robotic-arm manipulation
-- Blue and red block pick-and-place
-- Two-block stacking
-- Synthetic wrist-camera inspection
-- LiDAR range sensing
-- Incremental occupancy-grid mapping
-- Local correlative scan matching
-- Dock-return verification
-- PD + gravity-compensation control
-- Computed-torque control
-- Payload and model-mismatch experiments
-- Monte Carlo uncertainty analysis
+The mission combines:
 
-The repository contains MATLAB source code, tests, measured results, figures, simulation media, controller experiments and technical documentation.
+- Waypoint-constrained **A\*** planning with checked curved path segments and feedback path following.
+- Six-axis arm kinematics, quintic trajectories, blue/red block pickup and stacking.
+- Protected pickup and placement pads that the mobile base avoids during approach, departure and turning.
+- Scripted AGV crossing interlocks, LiDAR sensing and geometric clearance monitoring.
+- Live occupancy-grid mapping with incremental odometry prediction and local correlative scan matching.
+- A stationary wrist-camera inspection hold with a synthetic scan visualization, followed by dock return.
 
----
+Separate torque-driven experiments compare **PD + gravity compensation** and **computed-torque control** under nominal payloads, model mismatch, noise and disturbances.
 
 ## Documentation
 
-- [Technical Report](docs/Mobile_Manipulator_Technical_Report.pdf)
-- [Model and Control Documentation](docs/MODEL_AND_CONTROL.md)
-- [Evidence and Result Provenance](docs/EVIDENCE.md)
+- [Technical report and measured results](docs/Mobile_Manipulator_Technical_Report.pdf)
+- [Mathematical model and control implementation](docs/MODEL_AND_CONTROL.md)
+- [Evidence provenance](docs/EVIDENCE.md)
+- [Simulation media details](docs/MEDIA.md)
 
----
+## System Architecture
 
-
-### Media
-
-- [Watch / Download Simulation MP4](assets/mobile_manipulator_smooth-compressed%20(1)%20(online-video-cutter.com)-compressed.mp4)
-- [View Animated GIF](assets/mobile_manipulator_demo.gif)
-
-The supplied demonstration video is an edited visualization of the MATLAB simulation.
-
-Reported numerical performance values are taken from the measured MATLAB results and execution logs rather than from video duration.
-
----
-
-# System Architecture
-
-The project combines autonomous navigation, robotic manipulation, sensing, mapping and control within one coordinated mobile-manipulator mission.
-
-```text
-                     Mission Manager
-                           │
-            ┌──────────────┴──────────────┐
-            │                             │
-            ▼                             ▼
-     Mobile Navigation              6-DOF Manipulator
-            │                             │
-            ▼                             ▼
-      A* / Waypoints                Pick-and-Place
-      Path Tracking                 Block Stacking
-            │
-            ▼
-        LiDAR Sensor
-            │
-            ▼
-     Odometry Prediction
-            │
-            ▼
-  Local Scan Matching
-            │
-            ▼
-  Occupancy-Grid Mapping
+```mermaid
+flowchart TD
+    M["Mission manager"] --> N["A* navigation and path following"]
+    M --> A["Six-axis manipulation and stacking"]
+    G["Known geometry and scripted AGV occupancy"] --> N
+    L["Simulated LiDAR scans"] --> S["Local scan matching"]
+    O["Simulation odometry"] --> P["Pose prediction"]
+    P --> S
+    Q["Accumulated occupancy grid"] --> S
+    S --> U["Estimated pose and log-odds update"]
+    L --> U
+    U --> Q
 ```
 
----
+Odometry and LiDAR are separate inputs. The navigation planner uses known simulation geometry; it does **not** plan or replan directly from the estimated occupancy map.
 
-# Mission Sequence
+## Mission Sequence
 
-## 1. Blue Block Pickup
+1. **Pick up the blue block:** approach the pickup station, grasp, lift and stow the arm.
+2. **Navigate to placement:** follow the extended curved route and stop during scripted AGV crossings.
+3. **Place and return:** release the blue block and return to the pickup station.
+4. **Pick and stack the red block:** repeat transport and place the red block on the blue block.
+5. **Inspect the stack:** move to the inspection pose and remain stationary for six seconds while a synthetic scan sweep is displayed. Inspection uses geometric projection of known block centroids.
+6. **Return to dock:** navigate back and regulate the final base position and heading.
 
-The mobile base approaches the pickup station.
+## Simulation Interface
 
-The six-axis manipulator then:
+| Window | Contents |
+|---|---|
+| **3D Simulation** | Mobile base, six-axis arm, blocks, obstacles, stations, AGV and route |
+| **Live SLAM and Dashboard** | Occupancy map, estimated pose, heading, trajectory, scan endpoints, speed, clearance and mission status |
 
-- Moves toward the pickup location
-- Grasps the blue block
-- Lifts the object
-- Prepares for transport
+Both windows follow the same playback timeline. Closing the dashboard leaves the simulation running; closing the simulation stops playback. Video export captures the simulation window only.
 
-## 2. Navigation and AGV Interaction
+## Measured Mission Results
 
-The mobile manipulator follows the planned curved route toward the placement station.
+![Mission performance](results/mission_analysis.png)
 
-During navigation, scripted AGV lane occupancy is monitored.
-
-When the AGV occupies the crossing region, the mobile robot stops and resumes after the crossing becomes clear.
-
-## 3. Blue Block Placement and Return
-
-The robot reaches the target station and places the blue block.
-
-The mobile manipulator then returns to the pickup area for the second object.
-
-## 4. Red Block Pickup and Stacking
-
-The six-axis arm picks up the red block and transports it to the placement station.
-
-The red block is then stacked on the previously placed blue block.
-
-## 5. Wrist-Camera Inspection
-
-After stacking, the manipulator performs a synthetic inspection sweep.
-
-The final inspection includes a **six-second hold**.
-
-## 6. Autonomous Dock Return
-
-After completing manipulation and inspection, the mobile robot returns to its docking location.
-
-Dock-position accuracy is evaluated numerically.
-
----
-
-# Mission Safety Constraints
-
-Pickup and placement areas are protected from mobile-base travel.
-
-These restrictions remain active during:
-
-- Approach
-- Departure
-- Turning
-- Pickup
-- Placement
-- Stacking
-
-Additional geometric safeguards are used around the scripted AGV crossing.
-
----
-
-# Simulation Interface
-
-The simulation and monitoring components are separated into dedicated visualization windows.
-
-## 3D Simulation Window
-
-Displays:
-
-- Mobile base
-- Six-axis robotic arm
-- Blocks
-- Obstacles
-- Pickup station
-- Placement station
-- AGV
-- Navigation route
-- Manipulator motion
-
-## Live Monitoring Window
-
-Displays:
-
-- Occupancy map
-- Estimated robot pose
-- Heading
-- LiDAR scan
-- Robot trajectory
-- Speed
-- Obstacle clearance
-- Mission state
-- Mapping status
-
----
-
-# Measured Mission Results
-
-![Mission Performance](results/mission_analysis.png)
-
-| Metric | MATLAB Result |
+| Metric | MATLAB result |
 |---|---:|
 | Mission completed | **Yes** |
 | Simulated mission duration | **413.05 s** |
@@ -217,289 +94,78 @@ Displays:
 | Final inspection hold | **6 s** |
 | Processed mapping scans | **2066** |
 
-The complete mission was executed successfully in the supplied simulation with **zero modeled collision samples**.
+The two placement residuals are approximately **0.58 µm** and **0.61 µm**. These are numerical results from idealized rigid attachment and should not be interpreted as physical robot accuracy. The collision count refers to violating samples of the modeled geometry, not a hardware safety certification.
 
----
+## LiDAR Mapping and SLAM Scope
 
-# Placement Accuracy
+![Live occupancy map](results/live_slam_map.png)
 
-The two simulated placement errors are approximately:
+The map starts unknown and updates at **5 Hz** using a **0.10 m occupancy grid**. Incremental simulation odometry predicts pose. Local correlative scan matching aligns LiDAR endpoints with the existing map, and log-odds beam updates accumulate free and occupied cells.
 
-- **0.58 µm**
-- **0.61 µm**
+The map displays estimated pose, heading, trajectory and current scan endpoints. Moving AGV returns can leave temporary traces until later observations clear them.
 
-These values are obtained from an idealized rigid-attachment simulation and should **not** be interpreted as physical robot accuracy measurements.
+This implementation provides **local scan matching and incremental mapping**. It does not include loop closure or pose-graph optimization. Replay uses ideal simulation odometry and noise-free LiDAR, so near-zero estimated pose error does not demonstrate robustness to real sensor noise or long-term drift.
 
-Real hardware performance would additionally depend on calibration, encoder resolution, backlash, gripper compliance, structural deformation, contact mechanics and sensor noise.
+## Controller Benchmark
 
----
+The mission arm uses an **acceleration-command servo with inverse-dynamics torque checks**. The separate benchmark integrates **torque-driven arm dynamics**. These are different validation tasks.
 
-# Autonomous Navigation
+The benchmark evaluates both controllers with identical references, torque limits, payload conditions, disturbances and matched random-noise seeds.
 
-The mobile robot uses waypoint-constrained **A\*** planning together with continuous path tracking.
+![Controller comparison](assets/controller_summary.png)
 
-The navigation subsystem handles:
-
-- Global route generation
-- Curved waypoint sequences
-- Path following
-- Obstacle avoidance
-- Protected station regions
-- AGV crossing stops
-- Clearance monitoring
-- Autonomous dock return
-
-The current planner uses known obstacle geometry from the simulation environment and does not currently replan directly from the estimated occupancy map.
-
----
-
-# LiDAR Mapping
-
-![Live Occupancy Map](results/live_slam_map.png)
-
-| Parameter | Value |
-|---|---:|
-| Mapping update rate | **5 Hz** |
-| Occupancy-grid resolution | **0.10 m** |
-| Processed mapping scans | **2066** |
-
-The map begins in an unknown state and is updated incrementally while the robot navigates.
-
-## Mapping Pipeline
-
-```text
-LiDAR Scan
-    │
-    ▼
-Simulation Odometry
-    │
-    ▼
-Pose Prediction
-    │
-    ▼
-Local Correlative Scan Matching
-    │
-    ▼
-Pose Correction
-    │
-    ▼
-Log-Odds Beam Update
-    │
-    ▼
-Occupancy Grid
-```
-
-The live map displays:
-
-- Estimated pose
-- Robot heading
-- Trajectory
-- Scan endpoints
-- Occupied cells
-- Free cells
-- Unknown space
-
----
-
-# SLAM Scope
-
-The implemented mapping system includes:
-
-- Incremental odometry prediction
-- Local scan matching
-- Range-based occupancy updates
-- Online map construction
-
-The current implementation does **not** include:
-
-- Loop closure
-- Pose-graph optimization
-- Global bundle adjustment
-- Long-term drift correction
-- Real sensor calibration
-
-Replay uses ideal simulation odometry and noise-free simulated LiDAR.
-
-Therefore, near-zero estimated pose error in this simulation should not be interpreted as proof of real-world SLAM robustness.
-
----
-
-# Six-Axis Robotic Manipulator
-
-The mobile platform carries a six-axis robotic arm responsible for:
-
-- Pickup approach
-- Grasp execution
-- Object lifting
-- Transport
-- Placement
-- Block stacking
-- Wrist-camera inspection motion
-
-The mission arm uses an acceleration-command servo together with inverse-dynamics torque checks.
-
----
-
-# Controller Benchmark
-
-A separate torque-driven manipulator benchmark compares:
-
-- **PD + Gravity Compensation**
-- **Computed-Torque Control**
-
-Both controllers are evaluated using identical references, torque limits, matched noise seeds, payload conditions and disturbance conditions.
-
-![Controller Comparison](assets/controller_summary.png)
-
----
-
-# Controller Results
-
-| Scenario | PD RMS (rad) | Computed-Torque RMS (rad) |
+| Scenario | PD + gravity RMS (rad) | Computed-torque RMS (rad) |
 |---|---:|---:|
 | Nominal, 0 kg | 0.00162835 | **0.00021985** |
 | Nominal, 1 kg | 0.00255107 | **0.00021985** |
 | Nominal, 2 kg | 0.00373531 | **0.00021985** |
 | 2 kg + 20% mass mismatch + noise + disturbance | **0.01688337** | 0.04747052 |
 
-Computed-torque control achieves lower RMS tracking error in the three nominal payload cases.
+RMS pools all six joints and time samples. Computed torque achieves lower RMS in the three nominal cases; PD + gravity achieves lower RMS in the combined stress case. Under stress, computed torque still has a smaller terminal joint-error norm, so conclusions depend on the chosen metric.
 
-Under the combined stress scenario, the supplied PD + gravity-compensation configuration records lower RMS tracking error.
+The comparison applies to the supplied model, gains, trajectory and test conditions.
 
-This result applies specifically to the supplied model, gains, trajectories and test conditions.
+## Monte Carlo Uncertainty Analysis
 
----
+The study contains **20 matched scenarios: 40 controller runs in total**. Sampling varies payload from 0–2 kg, link mass/inertia scale from 0.85–1.15, and position-noise standard deviation from 0.001–0.005 rad. Each pair uses the same scenario and noise seed.
 
-# Monte Carlo Robustness Study
-
-A matched **20-trial uncertainty analysis** was performed to compare **PD + Gravity Compensation** against **Computed-Torque Control (CTC)** under the same sampled uncertainty conditions.
-
-| Controller | Mean RMS Error |
+| Statistic | Result |
 |---|---:|
-| PD + Gravity Compensation | **0.007494 rad** |
-| Computed-Torque Control | **0.013617 rad** |
+| Mean PD + gravity RMS | **0.007494 rad** |
+| Mean computed-torque RMS | **0.013617 rad** |
+| Mean paired difference, PD minus CTC | **−0.006123 rad** |
+| Trials with lower PD RMS | **20 of 20** |
 
 <p align="center">
-  <img src="https://github.com/ruddrho/matlab-mobile-manipulator-slam-control/blob/main/assets/monte_carlo_difference.png" width="900">
+  <img src="assets/monte_carlo_difference.png" alt="Paired Monte Carlo RMS error differences; negative values favor PD plus gravity" width="900">
 </p>
 
-<p align="center">
-  <b>Matched-trial RMS difference: PD RMS − CTC RMS</b>
-</p>
+Negative differences favor PD + gravity. The results show lower RMS sensitivity for the supplied PD configuration under these sampled uncertainties. They are not a universal ranking of the two control methods. The report provides the paired confidence interval and further interpretation.
 
-Negative values indicate that **PD + Gravity Compensation achieved lower RMS tracking error** than Computed-Torque Control for the corresponding matched trial.
+## Requirements and Running
 
-The mean matched difference was approximately **−0.006123 rad**, and all 20 sampled trials produced negative differences in the supplied experiment.
+The recorded user run used **MATLAB R2024a on Windows**. The project uses base MATLAB functionality; video export uses `VideoWriter`.
 
-These results indicate better robustness of the supplied PD + gravity-compensation configuration under the tested uncertainty conditions. They apply specifically to the implemented model, controller gains, disturbance assumptions and sampled uncertainty range, and should not be interpreted as a universal ranking of the two control methods.
+Open the repository root as MATLAB **Current Folder**.
 
----
-
-# Wrist-Camera Inspection
-
-The final manipulation stage includes a synthetic wrist-camera inspection sweep.
-
-The current implementation uses:
-
-- Known block locations
-- Geometric projection
-- Wrist motion
-- Synthetic inspection timing
-
-It does not currently perform real image-based perception or object recognition.
-
----
-
-# Key Features
-
-- MATLAB robotics simulation
-- Four-wheel autonomous mobile robot
-- Six-axis robotic manipulator
-- Mobile-manipulator mission
-- A\* path planning
-- Curved waypoint navigation
-- Dynamic AGV crossing logic
-- Collision monitoring
-- Pick-and-place
-- Multi-block stacking
-- Wrist-camera inspection
-- LiDAR sensing
-- Occupancy-grid mapping
-- Local scan matching
-- Live pose visualization
-- Dock-return verification
-- PD + gravity compensation
-- Computed-torque control
-- Payload testing
-- Disturbance testing
-- Model-mismatch testing
-- Monte Carlo uncertainty analysis
-- Automated numerical verification
-- Reproducible result generation
-
----
-
-# Requirements
-
-Verified environment:
-
-```text
-MATLAB R2024a
-Windows
-```
-
-The project primarily uses base MATLAB functionality.
-
-Video export uses MATLAB `VideoWriter`.
-
----
-
-# Running the Project
-
-Clone or download the repository and open the repository directory as the MATLAB **Current Folder**.
-
-## Replay the Supplied Mission
+### Replay the supplied measured mission
 
 ```matlab
 clear functions
 replay_simulation
 ```
 
-## Recompute the Main Result Suite
+### Recompute the main suite
 
 ```matlab
 run_all_results
 ```
 
-The main suite runs:
+This runs numerical model tests, the complete mission, station-clearance and AGV checks, mapping checks, and eight controller trials. An existing `results` folder is archived before fresh results are generated. Replay opens after the suite completes.
 
-- Numerical model tests
-- Full mobile-manipulator mission
-- Navigation checks
-- Station-clearance checks
-- AGV interaction checks
-- Mapping checks
-- Controller trials
+### Complete workflow, including uncertainty trials and video
 
-## Run Monte Carlo Analysis
-
-```matlab
-run_monte_carlo(20)
-```
-
-## Export Simulation Video
-
-```matlab
-export_video(30,2)
-```
-
-## Package Results
-
-```matlab
-package_results
-```
-
-## Complete Experiment Workflow
+Run each command after the previous one has finished:
 
 ```matlab
 run_all_results
@@ -508,197 +174,48 @@ export_video(30,2)
 package_results
 ```
 
-## Resume Controller Experiments
+The video export uses 30 FPS and 2× playback speed. Keep the simulation window open until export finishes. `package_results` writes `MATLAB_Results_For_Review.zip`.
+
+To rerun controller experiments while keeping an existing saved mission:
 
 ```matlab
 resume_results
 ```
 
----
+## Repository Guide
 
-# Repository Structure
+| Location | Actual files and purpose |
+|---|---|
+| `assets/` | `mobile_manipulator_smooth-compressed (1) (online-video-cutter.com)-compressed.mp4`, `mobile_manipulator_demo.gif`, `controller_summary.png`, `monte_carlo_difference.png` |
+| `docs/` | Technical report PDF, `MODEL_AND_CONTROL.md`, `EVIDENCE.md`, `MEDIA.md`, `GITHUB_UPLOAD.md` |
+| `results/` | Supplied mission, controller and Monte Carlo MAT/CSV data; MATLAB log; result figures |
+| `src/` | MATLAB functions such as `mm_fk.m`, `mm_ik.m`, `mm_rne.m`, `mm_astar.m`, `mm_drive.m`, `mm_lidar.m`, `mm_slam_step.m` and `mm_animate.m` |
+| `tests/` | `run_tests.m`, `test_long_route.m`, `test_station_clearance.m`, `test_slam.m`, `test_renderer.m` |
+| Repository root | `run_project.m`, `run_all_results.m`, `run_experiments.m`, `run_monte_carlo.m`, `resume_results.m`, `replay_simulation.m`, `export_video.m`, `package_results.m` |
 
-```text
-matlab-mobile-manipulator-slam-control/
-│
-├── assets/
-│   ├── mobile_manipulator_demo.gif
-│   ├── mobile_manipulator_smooth-compressed (1)
-│   │   (online-video-cutter.com)-compressed.mp4
-│   └── controller_summary.png
-│
-├── docs/
-│   ├── Mobile_Manipulator_Technical_Report.pdf
-│   ├── MODEL_AND_CONTROL.md
-│   └── EVIDENCE.md
-│
-├── results/
-│   ├── mission_analysis.png
-│   ├── live_slam_map.png
-│   ├── MAT files
-│   ├── CSV measurements
-│   └── execution logs
-│
-├── src/
-│   ├── kinematics
-│   ├── dynamics
-│   ├── planning
-│   ├── sensing
-│   ├── mapping
-│   └── rendering
-│
-├── tests/
-│   ├── model tests
-│   ├── mission tests
-│   ├── station-clearance tests
-│   ├── mapping tests
-│   └── renderer tests
-│
-├── replay_simulation.m
-├── run_all_results.m
-├── run_monte_carlo.m
-├── resume_results.m
-├── export_video.m
-├── package_results.m
-└── README.md
-```
+## Validation and Limitations
 
----
+The supplied MATLAB log records passing kinematics, Jacobian, mass-matrix, gravity, trajectory, planning and LiDAR checks, followed by successful mission, crossing, station-clearance and mapping checks. The repository preserves the numerical evidence separately from edited demonstration media.
 
-# Result Reproducibility
+The current model uses:
 
-The repository separates:
+- Simplified collision geometry without full robot self-collision or realistic contact dynamics.
+- Rigid-attachment grasping without force or grasp-stability modeling.
+- Known environment geometry and scripted AGV lane occupancy.
+- Idealized mobile-base motion without wheel slip or base/arm dynamic coupling.
+- Synthetic inspection based on known block locations, not image-based recognition.
+- Local mapping without loop closure, global optimization or real sensor calibration.
 
-1. Mission simulation results
-2. Controller experiments
-3. Monte Carlo analysis
-4. Visualization media
-5. Technical documentation
+Results describe this simulated workcell and the supplied controller settings. No physical robot deployment or real-world safety validation is claimed.
 
-This separation helps distinguish numerical evidence from edited demonstration media.
+## Future Work
 
----
+Potential extensions include ROS 2 integration, Gazebo contact and sensor simulation, Nav2 and SLAM Toolbox navigation/mapping, MoveIt 2 manipulation, RGB/RGB-D perception, and hardware experiments. These are future directions, not implemented features.
 
-# Scope and Limitations
+The next evaluation priorities are noisy odometry and LiDAR, independent map-quality metrics, controller tuning across uncertainty levels, and measurement of the simulation-to-reality gap.
 
-This repository represents a **simulation research project**, not a physical robot deployment.
+## Author
 
-Important limitations include:
+**Ruddrho Mollik — Robotics & Control Systems**
 
-- Simplified collision checking
-- Rigid-attachment grasping
-- Scripted AGV interaction
-- Synthetic wrist-camera inspection
-- No loop closure or pose-graph optimization
-- Navigation based on known obstacle geometry
-- No physical sensor calibration
-- No real-robot safety validation
-
-The mission arm and the torque-driven controller benchmark also represent different validation tasks and should not be treated as identical experiments.
-
----
-
-# Future Work
-
-Future development will focus on extending the current MATLAB baseline toward a more realistic robotics stack.
-
-Planned directions include:
-
-- **ROS 2** integration for modular navigation, sensing, manipulation and mission control
-- **Gazebo** physics simulation with realistic robot dynamics, contacts and sensor noise
-- **Nav2** and **SLAM Toolbox** for map-based autonomous navigation and SLAM
-- **MoveIt 2** for collision-aware manipulator motion planning and pick-and-place
-- RGB/RGB-D perception for object detection, localization and grasp verification
-- Real mobile-manipulator experiments for navigation, mapping and manipulation validation
-
-A longer-term goal is to compare the same mission across:
-
-```text
-MATLAB Simulation
-       ↓
-ROS 2 + Gazebo
-       ↓
-Real Mobile Manipulator
-```
-
-This progression would allow quantitative evaluation of the **simulation-to-reality gap**.
-
----
-
-# Research Value
-
-The project demonstrates the integration of multiple robotics subsystems within one complete mission:
-
-```text
-Path Planning
-     ↓
-Navigation
-     ↓
-Mobile Manipulation
-     ↓
-Dynamic AGV Interaction
-     ↓
-LiDAR Sensing
-     ↓
-Mapping
-     ↓
-Manipulator Control
-     ↓
-Quantitative Validation
-```
-
-The focus is on the interaction between **planning, navigation, manipulation, sensing, mapping and control**, rather than on isolated algorithms alone.
-
----
-
-# Repository Topics
-
-```text
-matlab
-robotics
-mobile-robot
-mobile-manipulator
-robot-arm
-robot-manipulator
-slam
-lidar
-occupancy-grid
-path-planning
-a-star
-autonomous-navigation
-pick-and-place
-robot-control
-computed-torque-control
-pd-control
-control-systems
-robotics-simulation
-mapping
-monte-carlo
-```
-
----
-
-# License
-
-This project is licensed under the **MIT License**.
-
-See the [LICENSE](LICENSE) file for details.
-
----
-
-# Author
-
-## Ruddrho Mollik
-
-**Robotics & Control Systems**
-
-GitHub: [@ruddrho](https://github.com/ruddrho)
-
-Repository:  
-[matlab-mobile-manipulator-slam-control](https://github.com/ruddrho/matlab-mobile-manipulator-slam-control)
-
----
-
-<p align="center">
-  <b>Developed by Ruddrho Mollik</b>
-</p>
+[GitHub profile](https://github.com/ruddrho) · [Project repository](https://github.com/ruddrho/matlab-mobile-manipulator-slam-control)
